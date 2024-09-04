@@ -110,7 +110,7 @@ var InitDemo = function(){
         gl.FLOAT,  //type of elements
         gl.FALSE,
         5 * Float32Array.BYTES_PER_ELEMENT,     // size of an individual vertex
-        0     // offset from the beginning of single vertex to this attribute
+        0     // offset from the beginning of single vertex data in triangleVertices to this attribute
     );
 
     gl.vertexAttribPointer(
