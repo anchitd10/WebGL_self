@@ -224,6 +224,8 @@ var InitDemo = function () {
         gl.uniform1f(timeLoc, time);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexBufferObject);
+		//the 2 vertexatrripointers below can be commented out as they've already been initiaised before outside this function.
+		//the prior initialisation is necessary and cannot be removed unlike the ones below
         gl.vertexAttribPointer(positionAttribLocation, 3, gl.FLOAT, false, 6 * Float32Array.BYTES_PER_ELEMENT, 0);
         gl.vertexAttribPointer(colorAttribLocation, 3, gl.FLOAT, false, 6 * Float32Array.BYTES_PER_ELEMENT, 3 * Float32Array.BYTES_PER_ELEMENT);
 
