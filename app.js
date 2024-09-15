@@ -109,7 +109,7 @@ var InitDemo = function(){
         2,   //number of elements
         gl.FLOAT,  //type of elements
         gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT,     // size of an individual vertex
+        5 * Float32Array.BYTES_PER_ELEMENT,     // size of an individual vertex(stride: specifies in how many next parameters we will begin the next vertex)
         0     // offset from the beginning of single vertex data in triangleVertices to this attribute
     );
 
@@ -128,6 +128,6 @@ var InitDemo = function(){
 
     //Main render loop
     gl.useProgram(program);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);   // (primitive, vertices to skip, number of vertices to draw)
+    gl.drawArrays(gl.TRIANGLES, 0, 3);   // (primitive, vertices to skip(step), number of vertices to draw)
 
 };
