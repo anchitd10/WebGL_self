@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Triangle</title>
+    <link rel = "stylesheet" href="styles.css">
+</head>
+<body onload = "InitDemo();">
+    <div class="canvas-container">
+        <canvas id="game-surface" width="600" height="600">
+            This is sample text
+        </canvas>
+        <i>Demo is above the printed text</i> <!-- Moved here -->
+    </div>
+    <br>
+
+    <script src="app.js"></script>
+    
+    <div class="form-container">
+        <div class="form-row">
+            <div class="coordinates">
+                <label>X1: <input type="number" id="x1" name="x1" step="any"></label>
+                <label>X2: <input type="number" id="x2" name="x2" step="any"></label>
+                <label>X3: <input type="number" id="x3" name="x3" step="any"></label>
+                <label>Y1: <input type="number" id="y1" name="y1" step="any"></label>
+                <label>Y2: <input type="number" id="y2" name="y2" step="any"></label>
+                <label>Y3: <input type="number" id="y3" name="y3" step="any"></label>
+            </div>
+    
+            <div class="colors">
+                <label>R: <input type="number" id="r" name="r" step="any" min="0" max="1"></label>
+                <label>G: <input type="number" id="g" name="g" step="any" min="0" max="1"></label>
+                <label>B: <input type="number" id="b" name="b" step="any" min="0" max="1"></label>
+            </div>
+        </div>
+        <button onclick="drawUserTriangle()">Draw Triangle</button>
+    </div>
+</body>
+</html>

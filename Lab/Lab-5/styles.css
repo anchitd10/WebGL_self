@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    height: 100vh;
+}
+
+.canvas-container {
+    display: flex;
+    flex-direction: column;
+    /* Ensure canvas and text are stacked vertically */
+    margin-right: 20px;
+}
+
+#game-surface {
+    border: 1px solid black;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.coordinates,
+.colors {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-right: 10px;
+}
