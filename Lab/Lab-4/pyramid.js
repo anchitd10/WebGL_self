@@ -1,4 +1,3 @@
-
 var vertexShaderText =
     [
         'precision mediump float;',
@@ -91,39 +90,39 @@ var InitDemo = function () {
     // Create pyramid data
     //
     var pyramidVertices = [
-        // Base (Red)
-        -1.0, -1.0, 1.0, 1.0, 0.0, 0.0, // Bottom Left (Red)
-        1.0, -1.0, 1.0, 1.0, 0.0, 0.0, // Bottom Right (Red)
-        0.0, -1.0, -1.0, 1.0, 0.0, 0.0, // Top (Red)
+        //base(red)
+        -1.0, -1.0, -1.0, 1.0, 0.0, 0.0, //bottom Left
+         1.0, -1.0, -1.0, 1.0, 0.0, 0.0, //bottom Right
+         0.0, -1.0,  1.0, 1.0, 0.0, 0.0, //top Center
     
-        // Front Face (Green)
-        0.0, 1.0, 0.0, 0.0, 1.0, 0.0, // Apex (Green)
-        -1.0, -1.0, 1.0, 0.0, 1.0, 0.0, // Bottom Left (Green)
-        1.0, -1.0, 1.0, 0.0, 1.0, 0.0, // Bottom Right (Green)
+        //front(yellow)
+         0.0,  1.0,  0.0, 1.0, 1.0, 0.0, //top
+        -1.0, -1.0, -1.0, 1.0, 1.0, 0.0, //bottom Left
+         1.0, -1.0, -1.0, 1.0, 1.0, 0.0, //bottom Right
     
-        // Right Face (Blue)
-        0.0, 1.0, 0.0, 0.0, 0.0, 1.0, // Apex (Blue)
-        1.0, -1.0, 1.0, 0.0, 0.0, 1.0, // Bottom Right (Blue)
-        1.0, -1.0, -1.0, 0.0, 0.0, 1.0, // Top Right (Blue)
+        //right(blue)
+         0.0,  1.0,  0.0, 0.0, 0.0, 1.0, //top
+         1.0, -1.0, -1.0, 0.0, 0.0, 1.0, //bottom right
+         0.0, -1.0,  1.0, 0.0, 0.0, 1.0, //top center
     
-        // Left Face (Yellow)
-        0.0, 1.0, 0.0, 1.0, 1.0, 0.0, // Apex (Yellow)
-        -1.0, -1.0, -1.0, 1.0, 1.0, 0.0, // Bottom Back Left
-        -1.0, -1.0, 1.0, 1.0, 1.0, 0.0  // Bottom Front Left
+        //left(green)
+         0.0,  1.0,  0.0, 0.0, 1.0, 0.0, //top
+         0.0, -1.0,  1.0, 0.0, 1.0, 0.0, //top center
+        -1.0, -1.0, -1.0, 0.0, 1.0, 0.0  //bottom left
     ];
     
 
     var pyramidIndices = [
-        // Base (Red)
+        //base
         0, 1, 2,
-    
-        // Front Face (Green)
+        
+        //front
         3, 4, 5,
-    
-        // Right Face (Blue)
+        
+        //right
         6, 7, 8,
-    
-        // Left Face (Yellow)
+        
+        //left
         9, 10, 11
     ];
     
@@ -164,7 +163,6 @@ var InitDemo = function () {
     gl.enableVertexAttribArray(colorAttribLocation);
 
 
-    // Tell OpenGL state machine which program should be active.
     gl.useProgram(program);
 
     var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
@@ -175,7 +173,9 @@ var InitDemo = function () {
     var viewMatrix = new Float32Array(16);
     var projMatrix = new Float32Array(16);
     mat4.identity(worldMatrix);
-    mat4.lookAt(viewMatrix, [0, 0, -8], [0, 0, 0], [0, 1, 0]);
+    mat4.rotate(worldMatrix, worldMatrix, Math.PI, [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [0, 0, -8], [0, 0, 0], [0, 1, 0]);
+    mat4.lookAt(viewMatrix, [0, -2, -5], [0, 0, 0], [0, 1, 0]);
     mat4.perspective(projMatrix, glMatrix.toRadian(45), canvas.clientWidth / canvas.clientHeight, 0.1, 1000.0);
 
     gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);

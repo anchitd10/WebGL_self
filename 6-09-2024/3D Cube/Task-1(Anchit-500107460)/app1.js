@@ -182,7 +182,6 @@ var InitDemo = function () {
 	gl.enableVertexAttribArray(positionAttribLocation);
 	gl.enableVertexAttribArray(colorAttribLocation);
 
-	// Tell OpenGL state machine which program should be active.
 	gl.useProgram(program);
 
 	var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
@@ -193,7 +192,7 @@ var InitDemo = function () {
 	var viewMatrix = new Float32Array(16);
 	var projMatrix = new Float32Array(16);
 	mat4.identity(worldMatrix);
-	mat4.lookAt(viewMatrix, [2, 2, -8], [0, 0, 0], [0, 1, 0]); // Camera slightly offset on x and y axes
+	mat4.lookAt(viewMatrix, [2, 2, -8], [0, 0, 0], [0, 1, 0]); // mat4.lookAt function positions the camera at (2, 2, -8), looking at the origin (0, 0, 0), with the up direction set to (0, 1, 0) (y-axis).
 	mat4.perspective(projMatrix, glMatrix.toRadian(45), canvas.clientWidth / canvas.clientHeight, 0.1, 1000.0);
 
 	gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
