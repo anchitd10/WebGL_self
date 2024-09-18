@@ -175,7 +175,7 @@ var InitDemo = function () {
     mat4.identity(worldMatrix);
     mat4.rotate(worldMatrix, worldMatrix, Math.PI, [0, 1, 0]);
     // mat4.lookAt(viewMatrix, [0, 0, -8], [0, 0, 0], [0, 1, 0]);
-    mat4.lookAt(viewMatrix, [0, -2, -5], [0, 0, 0], [0, 1, 0]);
+    mat4.lookAt(viewMatrix, [0, -2, -5], [0, 0, 0], [0, 1, 0]); // mat4.lookAt function positions the camera at (0, -2, -5), looking at the origin (0, 0, 0), with the up direction set to (0, 1, 0) (y-axis).
     mat4.perspective(projMatrix, glMatrix.toRadian(45), canvas.clientWidth / canvas.clientHeight, 0.1, 1000.0);
 
     gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
