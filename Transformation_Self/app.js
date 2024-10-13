@@ -3,7 +3,7 @@ var vertexShaderText =
 [
     'precision mediump float;',
     '',
-    'attribute vec2 vertPosition;',
+    'attribute vec3 vertPosition;',
     'attribute vec3 vertColor;',
     'varying vec3 fragColor;',
     'uniform mat4 mWorld;',
@@ -13,7 +13,7 @@ var vertexShaderText =
     'void main()',
     '{',
     '   fragColor = vertColor;',
-    '   gl_Position = mProjection * mView * mWorld * vec4(vertPosition, 0.0, 1.0);',
+    '   gl_Position = mProjection * mView * mWorld * vec4(vertPosition, 1.0);',
     '}'
 ].join('\n');
 //order matters---->right to left
@@ -32,14 +32,14 @@ var fragmentShaderText =
     '}'
 ].join('\n');
 
-
+var gl;
 
 // main display function code
 var InitDemo = function(){
     console.log("This is working");
 
     var canvas = document.getElementById('game-surface');
-    var gl = canvas.getContext('webgl');
+    gl = canvas.getContext('webgl');
 
     if(!gl){
         console.log("Webgl not supported, falling back on experimental-webgl");
@@ -53,6 +53,10 @@ var InitDemo = function(){
 
     gl.clearColor(0.75, 0.85, 0.8, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.CULL_FACE);
+    gl.frontFace(gl.CCW);
+    gl.cullFace(gl.BACK);
 
 
     //create shaders
@@ -93,17 +97,80 @@ var InitDemo = function(){
 
 
     //create buffer to display
-    var triangleVertices =
-    [  //X,  Y,   z             R     G     B
-        0.0, 0.5, 0.0,        1.0,  1.0,  0.0,
-        -0.5, -0.5, 0.0,      0.7,  0.0,  1.0,
-        0.5, -0.5, 0.0,       0.1,  1.0,  0.6
-    ];
+    var boxVertices = 
+	[ // X, Y, Z           R, G, B
+		// Top
+		-1.0, 1.0, -1.0,   0.5, 0.5, 0.5,
+		-1.0, 1.0, 1.0,    0.5, 0.5, 0.5,
+		1.0, 1.0, 1.0,     0.5, 0.5, 0.5,
+		1.0, 1.0, -1.0,    0.5, 0.5, 0.5,
+
+		// Left
+		-1.0, 1.0, 1.0,    0.75, 0.25, 0.5,
+		-1.0, -1.0, 1.0,   0.75, 0.25, 0.5,
+		-1.0, -1.0, -1.0,  0.75, 0.25, 0.5,
+		-1.0, 1.0, -1.0,   0.75, 0.25, 0.5,
+
+		// Right
+		1.0, 1.0, 1.0,    0.25, 0.25, 0.75,
+		1.0, -1.0, 1.0,   0.25, 0.25, 0.75,
+		1.0, -1.0, -1.0,  0.25, 0.25, 0.75,
+		1.0, 1.0, -1.0,   0.25, 0.25, 0.75,
+
+		// Front
+		1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
+		1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
+		-1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
+		-1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
+
+		// Back
+		1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
+		1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
+		-1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
+		-1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
+
+		// Bottom
+		-1.0, -1.0, -1.0,   0.5, 0.5, 1.0,
+		-1.0, -1.0, 1.0,    0.5, 0.5, 1.0,
+		1.0, -1.0, 1.0,     0.5, 0.5, 1.0,
+		1.0, -1.0, -1.0,    0.5, 0.5, 1.0,
+	];
+
+	var boxIndices =
+	[
+		// Top
+		0, 1, 2,
+		0, 2, 3,
+
+		// Left
+		5, 4, 6,
+		6, 4, 7,
+
+		// Right
+		8, 9, 10,
+		8, 10, 11,
+
+		// Front
+		13, 12, 14,
+		15, 14, 12,
+
+		// Back
+		16, 17, 18,
+		16, 18, 19,
+
+		// Bottom
+		21, 20, 22,
+		22, 20, 23
+	];
 
     //send information to graphics card
-    var triangleVerticesBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, triangleVerticesBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+    var boxVertexBufferObject = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, boxVertexBufferObject);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(boxVertices), gl.STATIC_DRAW);
+
+    var boxIndexBufferObject = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
     var positionAttriblocation = gl.getAttribLocation(program, "vertPosition");
     var colorAttriblocation = gl.getAttribLocation(program, "vertColor");
@@ -147,7 +214,7 @@ var InitDemo = function(){
     // mat4.identity(projMatrix);
 
     mat4.identity(worldMatrix);
-    mat4.lookAt(viewMatrix, [0, 0, -2], [0, 0, 0], [0, 1, 0]);
+    mat4.lookAt(viewMatrix, [0, 0, -8], [0, 0, 0], [0, 1, 0]);
     //                   user's place, point to center, y-axis is pointng up
     mat4.perspective(projMatrix, glMatrix.toRadian(45), canvas.width / canvas.height, 0.1, 1000.0);
 
@@ -155,8 +222,11 @@ var InitDemo = function(){
     gl.uniformMatrix4fv(matViewUniformLocation, gl.FALSE, viewMatrix);
     gl.uniformMatrix4fv(matProjectionUniformLocation, gl.FALSE, projMatrix);
 
+    var xRotationMatrix = new Float32Array(16);
+    var yRotationMatrix = new Float32Array(16);
 
-    //Main render loop
+    
+    //--------Main render loop
 
     var identityMatrix = new Float32Array(16);
     mat4.identity(identityMatrix);
@@ -167,13 +237,16 @@ var InitDemo = function(){
         // divided by 1000 to convert to milliseconds
         // one full rotation every 6 seconds
 
-        mat4.rotate(worldMatrix, identityMatrix, angle, [0,1,0]); // rotate worldMatrix about identityMarix by angle in particulat axis
+        // mat4.rotate(worldMatrix, identityMatrix, angle, [0,1,0]); // rotate worldMatrix about identityMarix by angle in particulat axis
+        mat4.rotate(yRotationMatrix, identityMatrix, angle, [0,1,0]);
+        mat4.rotate(xRotationMatrix, identityMatrix, angle/4, [1,0,0]);
+        mat4.mul(worldMatrix, xRotationMatrix, yRotationMatrix);
         gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);  //update the worldMatrix
 
         gl.clearColor(0.75, 0.85, 0.8, 1.0);
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
 
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.drawElements(gl.TRIANGLES, boxIndices.length, gl.UNSIGNED_SHORT, 0);
 
         requestAnimationFrame(loop);
     };
